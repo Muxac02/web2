@@ -53,11 +53,12 @@ function initial() {
 }
 
 const auth = require("./routes/auth.routes");
-auth(app);
+const authCheck = require("./routes/authCheck.routes");
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+auth(app);
+authCheck(app);
+
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
