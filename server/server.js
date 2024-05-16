@@ -4,6 +4,7 @@ let cors;
 let dbConfig;
 let db;
 
+
 cors = require('cors');
 express = require('express');
 const app = express();
@@ -50,6 +51,9 @@ function initial() {
         }
     });
 }
+
+const auth = require("./routes/auth.routes");
+auth(app);
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
