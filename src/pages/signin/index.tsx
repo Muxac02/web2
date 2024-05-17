@@ -20,7 +20,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { IconButton } from '@mui/material';
+import {Checkbox, FormControlLabel, IconButton } from '@mui/material';
 import { InputAdornment } from '@mui/material';
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -31,17 +31,16 @@ export default function SignUp() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
-            username: data.get('Username'),
-            nickname: data.get('nickname'),
-            email: data.get('email'),
+            username: data.get('username'),
             password: data.get('password'),
         });
     };
-    const [Username, setUsername] = React.useState("");
+    const [username, setUsername] = React.useState("");
     const [isUsernameError, setUsernameError] = React.useState("");
+    const [Remember, setRemember] = React.useState(false);
 
     const [isPasswordError, setPasswordError] = React.useState("");
-    const [Password, setPassword] = React.useState("");
+    const [password, setPassword] = React.useState("");
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
 
@@ -68,16 +67,16 @@ export default function SignUp() {
                         <Grid item xs={12}>
                             <TextField
                                 autoComplete="given-name"
-                                name="Username"
+                                name="username"
                                 required
                                 fullWidth
-                                id="Username"
-                                label="Enter your username or email"
+                                id="username"
+                                label="Enter your username"
                                 helperText={isUsernameError}
                                 error={!!isUsernameError}
                                 onBlur={()=>{
-                                    if (Username.length==0) {
-                                        setUsernameError("Please enter username or email")
+                                    if (username.length==0) {
+                                        setUsernameError("Please enter username")
                                     }
                                 }}
                                 onFocus={()=>{setUsernameError("")}}
@@ -90,14 +89,14 @@ export default function SignUp() {
                                 required
                                 fullWidth
                                 name="password"
-                                label="Password"
+                                label="password"
                                 type={showPassword?"text":"password"}
                                 id="password"
                                 autoComplete="new-password"
                                 helperText={isPasswordError}
                                 error={!!isPasswordError}
                                 onBlur={()=>{
-                                    if (Password.length==0) {
+                                    if (password.length==0) {
                                         setPasswordError("Please enter password")
                                     }
                                 }}
@@ -118,6 +117,17 @@ export default function SignUp() {
                                 }}
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                        <FormControlLabel
+                            control={<Checkbox
+                                color="primary"
+                                onClick={()=>{
+                                setRemember(!Remember);
+                                }}
+                            />}
+                            label="Remember me"
+                        />
+                        </Grid>
                     </Grid>
                     <Button
                         type="submit"
@@ -129,8 +139,8 @@ export default function SignUp() {
                     </Button>
                     <Grid container justifyContent="flex-end">
                         <Grid item>
-                            <Link href="#" variant="body2">
-                                Already have an account? Sign in
+                            <Link href="/signup" variant="body2">
+                                New here? Sign up
                             </Link>
                         </Grid>
                     </Grid>

@@ -1,15 +1,3 @@
-// import styles from "@/styles/Home.module.css";
-// import React from "react";
-// import {Button} from "@mui/material";
-//
-// export default function Signup() {
-//     return (
-//         <div>
-//             <Button variant={"outlined"}>Outlined</Button>
-//             <Button variant={"contained"}>Contained</Button>
-//         </div>
-//     )
-// }
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -24,33 +12,43 @@ import { IconButton } from '@mui/material';
 import { InputAdornment } from '@mui/material';
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {useSignupMutation} from "@/store/authApi";
 
 
 export default function SignUp() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            username: data.get('Username'),
-            nickname: data.get('nickname'),
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
+
     const [isUsernameError, setUsernameError] = React.useState("");
-    const [Username, setUsername] = React.useState("");
+    const [username, setUsername] = React.useState("");
 
     const [isNicknameError, setNicknameError] = React.useState("");
-    const [Nickname, setNickname] = React.useState("");
+    const [nickname, setNickname] = React.useState("");
     const [isNicknameFocused, setNicknameFocused] = React.useState(false);
 
     const [isEmailError, setEmailError] = React.useState("");
-    const [Email, setEmail] = React.useState("");
+    const [email, setEmail] = React.useState("");
 
     const [isPasswordError, setPasswordError] = React.useState("");
-    const [Password, setPassword] = React.useState("");
+    const [password, setPassword] = React.useState("");
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+    const [repeatPassword, setrepeatPassword] = React.useState("");
+    const [isrepeatPasswordError, setrepeatPasswordError] = React.useState("");
+    const [showrepeatPassword, setShowrepeatPassword] = React.useState(false);
+    const handleClickShowrepeatPassword = () => setShowrepeatPassword(!showrepeatPassword);
+
+
+    const [signup] = useSignupMutation();
+
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const data = new FormData(event.currentTarget);
+            if (!isUsernameError && !isNicknameError && !isEmailError && !isPasswordError && repeatPassword === password) {
+                signup({username, nickname, email, password})
+            }
+    };
 
     return (
             <Container component="main" maxWidth="xs">
@@ -74,19 +72,20 @@ export default function SignUp() {
                             <Grid item xs={12}>
                                 <TextField
                                     autoComplete="given-name"
-                                    name="Username"
+                                    name="username"
                                     required
                                     fullWidth
-                                    id="Username"
-                                    label="Username"
+                                    id="username"
+                                    label="username"
+                                    value={username}
                                     helperText={isUsernameError}
                                     error={!!isUsernameError}
                                     onBlur={()=>{
-                                        if (Username.length<3) {
-                                            setUsernameError("Username should be at least 3 characters long")
+                                        if (username.length<3) {
+                                            setUsernameError("username should be at least 3 characters long")
                                         }
-                                        if (!Username.match(/^[A-Za-z0-9]+$/g)) {
-                                            setUsernameError("Username should contain only english letters or numbers")
+                                        if (!username.match(/^[A-Za-z0-9]+$/g)) {
+                                            setUsernameError("username should contain only english letters or numbers")
                                         }
                                     }}
                                     onFocus={()=>{setUsernameError("")}}
@@ -99,17 +98,18 @@ export default function SignUp() {
                                     name="nickname"
                                     fullWidth
                                     id="nickname"
-                                    label={isNicknameFocused ? "Nickname" : Username.length==0 ? "Nickname" : Nickname.length == 0?`${Username}`:`Nickname`}
+                                    value={nickname}
+                                    label={isNicknameFocused ? "nickname" : username.length==0 ? "nickname" : nickname.length == 0?`${username}`:`Nickname`}
                                     helperText={isNicknameError}
                                     error={!!isNicknameError}
                                     onBlur={()=>{
                                         if (isUsernameError)
                                         {
-                                            if (Nickname.length < 3) {
-                                                setNicknameError("Nickname should be at least 3 characters long")
+                                            if (nickname.length < 3) {
+                                                setNicknameError("nickname should be at least 3 characters long")
                                             }
-                                            if (!Nickname.match(/^[A-Za-z0-9]+$/g)) {
-                                                setNicknameError("Nickname should contain only english letters or numbers")
+                                            if (!nickname.match(/^[A-Za-z0-9]+$/g)) {
+                                                setNicknameError("nickname should contain only english letters or numbers")
                                             }
                                         }
                                         setNicknameFocused(false);
@@ -126,17 +126,18 @@ export default function SignUp() {
                                     required
                                     fullWidth
                                     id="email"
-                                    label="Email Address"
+                                    label="email Address"
                                     name="email"
+                                    value={email}
                                     autoComplete="email"
                                     helperText={isEmailError}
                                     error={!!isEmailError}
                                     onBlur={()=>{
-                                        if (Email.length<3) {
-                                            setEmailError("Email should be at least 3 characters long")
+                                        if (email.length<3) {
+                                            setEmailError("email should be at least 3 characters long")
                                         }
-                                        if (!Email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
-                                            setEmailError("Non-existent Email address")
+                                        if (!email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
+                                            setEmailError("Non-existent email address")
                                         }
                                     }}
                                     onFocus={()=>{setEmailError("")}}
@@ -148,27 +149,28 @@ export default function SignUp() {
                                     required
                                     fullWidth
                                     name="password"
-                                    label="Password"
+                                    label="password"
+                                    value={password}
                                     type={showPassword?"text":"password"}
                                     id="password"
                                     autoComplete="new-password"
                                     helperText={isPasswordError}
                                     error={!!isPasswordError}
                                     onBlur={()=>{
-                                        if (!Password.match(/[A-Z]/g)) {
-                                            setPasswordError("Password should contain at least 1 Uppercase symbol")
+                                        if (!password.match(/[A-Z]/g)) {
+                                            setPasswordError("password should contain at least 1 Uppercase symbol")
                                         }
-                                        if (!Password.match(/[a-z]/g)) {
-                                            setPasswordError("Password should contain at least 1 Lowercase symbol")
+                                        if (!password.match(/[a-z]/g)) {
+                                            setPasswordError("password should contain at least 1 Lowercase symbol")
                                         }
-                                        if (!Password.match(/[!?@#$%^&*()\-=_+:,./]/g)) {
-                                            setPasswordError("Password should contain at least 1 special symbol")
+                                        if (!password.match(/[!?@#$%^&*()\-=_+:,./]/g)) {
+                                            setPasswordError("password should contain at least 1 special symbol")
                                         }
-                                        if (Password.length<8) {
-                                            setPasswordError("Password should be at least 8 characters long")
+                                        if (password.length<8) {
+                                            setPasswordError("password should be at least 8 characters long")
                                         }
-                                        if (!Password.match(/^[A-z0-9!?@#$%^&*()\-=_+:,./]+$/g)) {
-                                            setPasswordError("Password should be made of only english letters, numbers and next special symbols: !?@#$%^&*()-=_+:,./ ")
+                                        if (!password.match(/^[A-z0-9!?@#$%^&*()\-=_+:,./]+$/g)) {
+                                            setPasswordError("password should be made of only english letters, numbers and next special symbols: !?@#$%^&*()-=_+:,./ ")
                                         }
                                     }}
                                     onFocus={()=>{setPasswordError("")}}
@@ -182,6 +184,40 @@ export default function SignUp() {
                                                     onClick={handleClickShowPassword}
                                                 >
                                                     {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="repeatpassword"
+                                    label="Repeat password"
+                                    value={repeatPassword}
+                                    type={showrepeatPassword?"text":"password"}
+                                    id="repeatpassword"
+                                    autoComplete="new-repeatpassword"
+                                    helperText={isrepeatPasswordError}
+                                    error={!!isrepeatPasswordError}
+                                    onBlur={()=>{
+                                        if (!(repeatPassword == password)) {
+                                            setrepeatPasswordError("Passwords are not same")
+                                        }
+                                    }}
+                                    onFocus={()=>{setrepeatPasswordError("")}}
+                                    onChange={(event) => setrepeatPassword(event.target.value)}
+                                    InputProps={{ // <-- This is where the toggle button is added.
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    tabIndex={-1}
+                                                    aria-label="Посмотреть пороль"
+                                                    onClick={handleClickShowrepeatPassword}
+                                                >
+                                                    {showrepeatPassword ? <Visibility /> : <VisibilityOff />}
                                                 </IconButton>
                                             </InputAdornment>
                                         )
