@@ -1,52 +1,34 @@
-// import styles from "@/styles/Home.module.css";
-// import React from "react";
-// import {Button} from "@mui/material";
-//
-// export default function Signup() {
-//     return (
-//         <div>
-//             <Button variant={"outlined"}>Outlined</Button>
-//             <Button variant={"contained"}>Contained</Button>
-//         </div>
-//     )
-// }
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {Checkbox, FormControlLabel, IconButton } from '@mui/material';
-import { InputAdornment } from '@mui/material';
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {Checkbox, FormControlLabel } from '@mui/material';
+import {FormEvent, useState} from "react";
 
 
 export default function SignUp() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
-            username: data.get('username'),
-            password: data.get('password'),
+            username: username,
+            password: password,
+            remember: Remember
         });
     };
-    const [username, setUsername] = React.useState("");
-    const [isUsernameError, setUsernameError] = React.useState("");
-    const [Remember, setRemember] = React.useState(false);
+    const [username, setUsername] = useState("");
+    const [isUsernameError, setUsernameError] = useState("");
+    const [Remember, setRemember] = useState(false);
 
-    const [isPasswordError, setPasswordError] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [showPassword, setShowPassword] = React.useState(false);
-    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const [isPasswordError, setPasswordError] = useState("");
+    const [password, setPassword] = useState("");
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
             <Box
                 sx={{
                     marginTop: 8,
@@ -55,11 +37,8 @@ export default function SignUp() {
                     alignItems: 'center',
                 }}
             >
-                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                    {/*<LockOutlinedIcon />*/}
-                </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign up
+                    Sign in
                 </Typography>
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
@@ -90,7 +69,7 @@ export default function SignUp() {
                                 fullWidth
                                 name="password"
                                 label="password"
-                                type={showPassword?"text":"password"}
+                                type={"password"}
                                 id="password"
                                 autoComplete="new-password"
                                 helperText={isPasswordError}
@@ -102,19 +81,6 @@ export default function SignUp() {
                                 }}
                                 onFocus={()=>{setPasswordError("")}}
                                 onChange={(event) => setPassword(event.target.value)}
-                                InputProps={{ // <-- This is where the toggle button is added.
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                tabIndex={-1}
-                                                aria-label="Посмотреть пороль"
-                                                onClick={handleClickShowPassword}
-                                            >
-                                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    )
-                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>

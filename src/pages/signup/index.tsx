@@ -1,47 +1,37 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { IconButton } from '@mui/material';
-import { InputAdornment } from '@mui/material';
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {useSignupMutation} from "@/store/authApi";
+import {FormEvent, useState} from "react";
 
 
 export default function SignUp() {
 
-    const [isUsernameError, setUsernameError] = React.useState("");
-    const [username, setUsername] = React.useState("");
+    const [isUsernameError, setUsernameError] = useState("");
+    const [username, setUsername] = useState("");
 
-    const [isNicknameError, setNicknameError] = React.useState("");
-    const [nickname, setNickname] = React.useState("");
-    const [isNicknameFocused, setNicknameFocused] = React.useState(false);
+    const [isNicknameError, setNicknameError] = useState("");
+    const [nickname, setNickname] = useState("");
+    const [isNicknameFocused, setNicknameFocused] = useState(false);
 
-    const [isEmailError, setEmailError] = React.useState("");
-    const [email, setEmail] = React.useState("");
+    const [isEmailError, setEmailError] = useState("");
+    const [email, setEmail] = useState("");
 
-    const [isPasswordError, setPasswordError] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [showPassword, setShowPassword] = React.useState(false);
-    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const [isPasswordError, setPasswordError] = useState("");
+    const [password, setPassword] = useState("");
 
-    const [repeatPassword, setrepeatPassword] = React.useState("");
-    const [isrepeatPasswordError, setrepeatPasswordError] = React.useState("");
-    const [showrepeatPassword, setShowrepeatPassword] = React.useState(false);
-    const handleClickShowrepeatPassword = () => setShowrepeatPassword(!showrepeatPassword);
-
+    const [repeatPassword, setrepeatPassword] = useState("");
+    const [isrepeatPasswordError, setrepeatPasswordError] = useState("");
 
     const [signup] = useSignupMutation();
 
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const data = new FormData(event.currentTarget);
@@ -52,7 +42,6 @@ export default function SignUp() {
 
     return (
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
                 <Box
                     sx={{
                         marginTop: 8,
@@ -61,9 +50,6 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        {/*<LockOutlinedIcon />*/}
-                    </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
@@ -151,7 +137,7 @@ export default function SignUp() {
                                     name="password"
                                     label="password"
                                     value={password}
-                                    type={showPassword?"text":"password"}
+                                    type={"password"}
                                     id="password"
                                     autoComplete="new-password"
                                     helperText={isPasswordError}
@@ -175,19 +161,6 @@ export default function SignUp() {
                                     }}
                                     onFocus={()=>{setPasswordError("")}}
                                     onChange={(event) => setPassword(event.target.value)}
-                                    InputProps={{ // <-- This is where the toggle button is added.
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    tabIndex={-1}
-                                                    aria-label="Посмотреть пороль"
-                                                    onClick={handleClickShowPassword}
-                                                >
-                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -197,7 +170,7 @@ export default function SignUp() {
                                     name="repeatpassword"
                                     label="Repeat password"
                                     value={repeatPassword}
-                                    type={showrepeatPassword?"text":"password"}
+                                    type={"password"}
                                     id="repeatpassword"
                                     autoComplete="new-repeatpassword"
                                     helperText={isrepeatPasswordError}
@@ -209,19 +182,6 @@ export default function SignUp() {
                                     }}
                                     onFocus={()=>{setrepeatPasswordError("")}}
                                     onChange={(event) => setrepeatPassword(event.target.value)}
-                                    InputProps={{ // <-- This is where the toggle button is added.
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    tabIndex={-1}
-                                                    aria-label="Посмотреть пороль"
-                                                    onClick={handleClickShowrepeatPassword}
-                                                >
-                                                    {showrepeatPassword ? <Visibility /> : <VisibilityOff />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }}
                                 />
                             </Grid>
                         </Grid>

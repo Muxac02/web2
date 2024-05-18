@@ -15,6 +15,25 @@ const verifyToken = (req, res, next) => {
         next();
     })
 }
+
+const db = require("../models");
+
+const existingUser = (req, res, next) => {
+    db.user.findOne({email: req.body.email}).exec((err, user) => {
+        if (err) {
+            res.status(500).send({message: err});
+            return;
+        }
+        if (!user) {
+            next();
+        }
+        else {
+            return res.status(401).send({message:`User with ${req.body.email} already exists`});
+        }
+    })
+}
+
 module.exports = {
-    verifyToken
+    verifyToken,
+    existingUser
 }
