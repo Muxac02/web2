@@ -28,7 +28,7 @@ export default function NewChat() {
             justifyContent: "flex-end",
             alignItems: "flex-end"
         }}>
-            <Button variant={"contained"} onClick={()=> { setOpen(true) }}>ADD NEW CHAT</Button>
+            <Button variant={"contained"} onClick={()=> { setOpen(true) }} sx={{width: "100%",marginRight: 2}}>ADD NEW CHAT</Button>
         </Box>
         <Dialog open={open}
                 onClose={() => setOpen(false)}

@@ -87,7 +87,7 @@ export const UpdateChat = ({chatId} : {chatId: string}) => {
                             marginRight: "1vw"
                         }}>
                             <Button variant={"outlined"} onClick={() => {
-                                updateChat({id: chatId, user: userId, chatname: chatname, participants: newParticipants.split(","), owner: newOwner});
+                                updateChat({id: chatId, user: userId, chatname: chatname, participants: [userId, ...newParticipants.split(",")], owner: newOwner});
                             }}>Confirm</Button>
                         </Box>
                         <Box sx={{

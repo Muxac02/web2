@@ -3,7 +3,7 @@ let express;
 let cors;
 let dbConfig;
 let db;
-
+const {startWebsocketServer} = require("./ws-server");
 
 cors = require('cors');
 express = require('express');
@@ -60,8 +60,8 @@ authCheck(app);
 require("./routes/chats.routes")(app);
 
 
-
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
 
+startWebsocketServer(server)

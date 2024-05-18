@@ -1,6 +1,5 @@
 import {Box, TextField} from "@mui/material";
 import {ChatsList} from "@/components/chat-list/chatList";
-import NewChat from "@/components/new-chat/newChat";
 import {useGetUserChatsQuery} from "@/store/chatsApi";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/store";
@@ -50,7 +49,6 @@ export default function ChatsListContainer() {
                 />
             </Box>
             <ChatsList chats={filteredChats as ChatDTO[]} />
-            <NewChat />
         </Box>
     </>
 }
