@@ -16,7 +16,7 @@ const signup = (req, res) => {
             res.status(500).send({message: err});
             return;
         }
-        res.status(200).send({message: "User successfully saved"});
+        res.status(200).send({message: "User successfully saved", payload: {userId: user.id}});
         console.log(`User with ${user.username} is saved`);
     })
 }
@@ -30,10 +30,11 @@ const signin = (req, res) => {
         if (!user) {
             res.status(404).send({message: `There is no username with ${req.body.username}`});
         }
+        else {
         const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
         if (passwordIsValid) {
-            const token = jwt.sign({id: user.id}, "some secret", {expiresIn: req.body.remember?(1000*60):(1000*60*60*24)});
-            res.status(200).send({message: "User authenticated", user: {
+            const token = jwt.sign({id: user.id}, "secret", {expiresIn: req.body.remember?(1000*60):(1000*60*60*24)});
+            res.status(200).send({message: "User authenticated", payload: {userId: user.id}, user: {
                 username: user.username,
                 nickname: user.nickname,
                 email: user.email,
@@ -41,7 +42,7 @@ const signin = (req, res) => {
                 }});
         } else {
             res.status(404).send({message: "Wrong username or password"});
-        }
+        }}
     })
 }
 

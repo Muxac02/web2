@@ -7,25 +7,47 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {Checkbox, FormControlLabel } from '@mui/material';
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
+import {useSigninMutation} from "@/store/authApi";
+import {useDispatch} from "react-redux";
+import {useRouter} from "next/router";
+import {setUserId} from "@/store/auth/authActions";
 
 
 export default function SignUp() {
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+        if (!isUsernameError && !isPasswordError)
+        {
+            signin({username,password,remember});
+            console.log({
             username: username,
             password: password,
-            remember: Remember
+            remember: remember
         });
+        }
     };
     const [username, setUsername] = useState("");
     const [isUsernameError, setUsernameError] = useState("");
-    const [Remember, setRemember] = useState(false);
+    const [remember, setRemember] = useState(false);
 
     const [isPasswordError, setPasswordError] = useState("");
     const [password, setPassword] = useState("");
+
+
+    const [signin, signinResult] = useSigninMutation();
+
+    const dispatch = useDispatch();
+
+    const router = useRouter();
+
+    useEffect(()=>{
+        if (signinResult.isSuccess) {
+            dispatch(setUserId({userId: signinResult.data.payload?.userId}))
+            router.push("/chats")
+        }
+    }, [signinResult])
 
     return (
         <Container component="main" maxWidth="xs">
@@ -88,7 +110,7 @@ export default function SignUp() {
                             control={<Checkbox
                                 color="primary"
                                 onClick={()=>{
-                                setRemember(!Remember);
+                                setRemember(!remember);
                                 }}
                             />}
                             label="Remember me"
@@ -101,7 +123,7 @@ export default function SignUp() {
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                     >
-                        Sign Up
+                        Sign In
                     </Button>
                     <Grid container justifyContent="flex-end">
                         <Grid item>

@@ -4,7 +4,7 @@ export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/auth/' }),
     endpoints: (builder) => ({
-        signup: builder.mutation<{message: string}, {
+        signup: builder.mutation<{message: string, payload: {userId: string}}, {
             username: string;
             nickname: string;
             email: string;
@@ -16,7 +16,8 @@ export const authApi = createApi({
         }),
         signin: builder.mutation<{message: string, payload: {userId: string}}, {
             username: string;
-            password: string
+            password: string;
+            remember: boolean
         }>({
             query: (userData) => ({
                 url: "/signin", method: "POST", body: userData

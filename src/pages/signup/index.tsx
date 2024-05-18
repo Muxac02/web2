@@ -7,7 +7,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {useSignupMutation} from "@/store/authApi";
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {useRouter} from "next/router";
+import {setUserId} from "@/store/auth/authActions";
 
 
 export default function SignUp() {
@@ -28,14 +31,28 @@ export default function SignUp() {
     const [repeatPassword, setrepeatPassword] = useState("");
     const [isrepeatPasswordError, setrepeatPasswordError] = useState("");
 
-    const [signup] = useSignupMutation();
+    const [signup,signupResult] = useSignupMutation();
+    const dispatch = useDispatch();
 
+
+    const router = useRouter();
+
+    useEffect(()=>{
+        if (signupResult.isSuccess) {
+            dispatch(setUserId({userId: signupResult.data.payload?.userId}))
+            router.push("/chats")
+        }
+    }, [signupResult])
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const data = new FormData(event.currentTarget);
             if (!isUsernameError && !isNicknameError && !isEmailError && !isPasswordError && repeatPassword === password) {
+                if (nickname.length==0)
+                {
+                    setNicknameError(username);
+                }
                 signup({username, nickname, email, password})
             }
     };
