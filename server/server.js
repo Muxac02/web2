@@ -57,6 +57,7 @@ const authCheck = require("./routes/authCheck.routes");
 
 auth(app);
 authCheck(app);
+require("./routes/chats.routes")(app);
 
 
 
