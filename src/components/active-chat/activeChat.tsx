@@ -5,7 +5,6 @@ import {RootState} from "@/store/store";
 import {DeleteChat} from "@/components/delete-chat/deleteChat";
 import {UpdateChat} from "@/components/update-chat/updateChat";
 import * as React from "react";
-import NewChat from "@/components/new-chat/newChat";
 import {socket} from "@/pages/chats";
 import {useState} from "react";
 
@@ -15,6 +14,7 @@ export default function ActiveChat() {
     const selectedChat = useSelector((state: RootState) => state.chat.selectedChat);
 
     const userId = useSelector((state: RootState) => state.auth.userId);
+
 
     return <Box sx={{
         display: "flex",
@@ -83,7 +83,7 @@ export default function ActiveChat() {
                 <Box sx={{
                     display: "flex",
                     flexDirection: "column",
-                    height: "73vh",
+                    height: "100%",
                     overflowY: "auto",
                     scrollbarColor: "teal",
                     "&::-webkit-scrollbar": {width: "0px"},
@@ -97,7 +97,7 @@ export default function ActiveChat() {
                 <Box sx={{
                     display: "flex",
                     flexDirection: "row",
-                    height: "80%",
+                    height: "10%",
                     width: "100%",
                     alignItems: "flex-end",
                     justifyContent: "center"
@@ -114,7 +114,8 @@ export default function ActiveChat() {
                         variant={"contained"}
                         sx={{width: "10%", marginLeft: 2}}
                         onClick={() => {
-                            socket.emit("new_message", {newMessage, id: selectedChat._id, author: userId, chatname: selectedChat.chatname})}}>
+                            socket.emit("new_message", {id: selectedChat._id, newMessage: newMessage, author: userId, chatname: selectedChat.chatname});
+                        }}>
                         Send</Button>
                 </Box>
             </>
