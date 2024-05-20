@@ -11,6 +11,9 @@ import {FormEvent, useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useRouter} from "next/router";
 import {setUserId} from "@/store/auth/authActions";
+import {IconButton, InputAdornment } from '@mui/material';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from '@mui/icons-material/Visibility';
 
 
 export default function SignUp() {
@@ -33,6 +36,12 @@ export default function SignUp() {
 
     const [signup,signupResult] = useSignupMutation();
     const dispatch = useDispatch();
+
+    const [showPassword, setShowPassword] = React.useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+    const [showRepeatPassword, setShowRepeatPassword] = React.useState(false);
+    const handleClickShowRepeatPassword = () => setShowRepeatPassword(!showRepeatPassword);
 
 
     const router = useRouter();
@@ -154,7 +163,7 @@ export default function SignUp() {
                                     name="password"
                                     label="password"
                                     value={password}
-                                    type={"password"}
+                                    type={showPassword?"text":"password"}
                                     id="password"
                                     autoComplete="new-password"
                                     helperText={isPasswordError}
@@ -178,6 +187,19 @@ export default function SignUp() {
                                     }}
                                     onFocus={()=>{setPasswordError("")}}
                                     onChange={(event) => setPassword(event.target.value)}
+                                    InputProps={{ // <-- This is where the toggle button is added.
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    tabIndex={-1}
+                                                    aria-label="Посмотреть пороль"
+                                                    onClick={handleClickShowPassword}
+                                                >
+                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -187,7 +209,7 @@ export default function SignUp() {
                                     name="repeatpassword"
                                     label="Repeat password"
                                     value={repeatPassword}
-                                    type={"password"}
+                                    type={showRepeatPassword?"text":"password"}
                                     id="repeatpassword"
                                     autoComplete="new-repeatpassword"
                                     helperText={isrepeatPasswordError}
@@ -199,6 +221,19 @@ export default function SignUp() {
                                     }}
                                     onFocus={()=>{setrepeatPasswordError("")}}
                                     onChange={(event) => setrepeatPassword(event.target.value)}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    tabIndex={-1}
+                                                    aria-label="Посмотреть пороль"
+                                                    onClick={handleClickShowRepeatPassword}
+                                                >
+                                                    {showRepeatPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
                                 />
                             </Grid>
                         </Grid>

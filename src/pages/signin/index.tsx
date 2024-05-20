@@ -6,12 +6,14 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {Checkbox, FormControlLabel } from '@mui/material';
+import {Checkbox, FormControlLabel, IconButton, InputAdornment } from '@mui/material';
 import {FormEvent, useEffect, useState} from "react";
 import {useSigninMutation} from "@/store/authApi";
 import {useDispatch} from "react-redux";
 import {useRouter} from "next/router";
 import {setUserId} from "@/store/auth/authActions";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 
 export default function SignUp() {
@@ -34,6 +36,9 @@ export default function SignUp() {
 
     const [isPasswordError, setPasswordError] = useState("");
     const [password, setPassword] = useState("");
+
+    const [showPassword, setShowPassword] = React.useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
 
 
     const [signin, signinResult] = useSigninMutation();
@@ -91,7 +96,7 @@ export default function SignUp() {
                                 fullWidth
                                 name="password"
                                 label="password"
-                                type={"password"}
+                                type={showPassword?"text":"password"}
                                 id="password"
                                 autoComplete="new-password"
                                 helperText={isPasswordError}
@@ -103,6 +108,19 @@ export default function SignUp() {
                                 }}
                                 onFocus={()=>{setPasswordError("")}}
                                 onChange={(event) => setPassword(event.target.value)}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                tabIndex={-1}
+                                                aria-label="Посмотреть пороль"
+                                                onClick={handleClickShowPassword}
+                                            >
+                                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
