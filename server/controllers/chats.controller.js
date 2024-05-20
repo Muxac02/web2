@@ -26,7 +26,7 @@ const getChats = (req, res) => {
         if (err) {
             return res.status(500).send({message: err});
         }
-        if (!chats.length) {
+        if (chats.length==0) {
             return res.status(404).send({message: `Chats for ${req.params.user} haven't been found`});
         }
         res.status(200).send({message: "Chats have been found", payload: chats});

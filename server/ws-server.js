@@ -11,8 +11,21 @@ const startWebsocketServer = (server) => {
         }});
 
     io.on("connection", (socket) => {
+        socket.on("add_user_to_rooms",
+            async({userId}) => {
+                Chat.find({participants: userId}).exec((err, chats) => {
+                    chats.forEach((chat) => {
+                        socket.join(chat.chatname);
+                    });
+
+                })
+            })
+
+
+
+
         socket.on("new_message", async(payload)=>{
-            const {id, newMessage, author} = payload;
+            const {id, newMessage, author, chatname} = payload;
 
             Chat.findById(id, (err, chat) => {
                 if (err) {
@@ -32,7 +45,7 @@ const startWebsocketServer = (server) => {
                         socket.emit("error", err);
                         return;
                     }
-                    socket.emit("chat_updated", chat)
+                    socket.to(chatname).emit("chat_updated", chat);
                 })
             })
         })

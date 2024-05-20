@@ -12,6 +12,9 @@ export default function NewChat() {
     const [open, setOpen] = useState(false);
 
     const [createChat, createChatResult] = useCreateChatMutation();
+    const [secondPart, setSecondPart] = useState("");
+    const [secondPartError, setSecondPartError] = useState("");
+
 
     const userId = useSelector((state: RootState) => state.auth.userId);
 
@@ -46,6 +49,8 @@ export default function NewChat() {
             <DialogContent id={"dialog-content"}>
                 <Box sx={{
                     display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
                     justifyContent: "center",
                     marginTop: "1vh"
                 }}>
@@ -58,6 +63,17 @@ export default function NewChat() {
                                }}}
                                onFocus={()=>{setIsChatnameError("")}}
                                helperText={isChatnameError}
+                               fullWidth
+                    />
+                    <TextField label={"Second participant (userId)"}
+                               value={secondPart}
+                               onChange={(ev)=>setSecondPart(ev.target.value)}
+                               error={!!isChatnameError}
+                               onBlur={()=>{if (secondPart === "") {
+                                   setSecondPartError("Invalid participant");
+                               }}}
+                               onFocus={()=>{setSecondPartError("")}}
+                               helperText={secondPartError}
                                fullWidth
                     />
                 </Box>
@@ -73,7 +89,7 @@ export default function NewChat() {
                         marginRight: "1vw"
                     }}>
                         <Button variant={"outlined"} onClick={() => {
-                            createChat({chatname: chatname, participants: [userId], owner: userId});
+                            createChat({chatname: chatname, participants: [userId, secondPart], owner: userId});
                         }}>Confirm</Button>
                     </Box>
                     <Box sx={{

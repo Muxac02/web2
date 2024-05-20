@@ -91,7 +91,6 @@ export default function ActiveChat() {
                 }}>
                     {selectedChat?.messages.map((message) => (
                         <MessageItem
-                            key = {message.date}
                             message={message}/>
                     ))}
                 </Box>
@@ -104,7 +103,7 @@ export default function ActiveChat() {
                     justifyContent: "center"
 
                 }}>
-                    <NewChat />
+
                     <TextField
                         label={"Enter your message"}
                         variant={"standard"}
@@ -115,7 +114,7 @@ export default function ActiveChat() {
                         variant={"contained"}
                         sx={{width: "10%", marginLeft: 2}}
                         onClick={() => {
-                            socket.emit("new_message", {newMessage, id: selectedChat._id, author: userId})}}>
+                            socket.emit("new_message", {newMessage, id: selectedChat._id, author: userId, chatname: selectedChat.chatname})}}>
                         Send</Button>
                 </Box>
             </>

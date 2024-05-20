@@ -5,6 +5,9 @@ import * as React from "react";
 import LogoutButton from "@/components/logout-button/logout";
 import { io } from "socket.io-client";
 import {useEffect} from "react";
+import {useSelector} from "react-redux";
+import {RootState} from "@/store/store";
+import NewChat from "@/components/new-chat/newChat";
 
 export const socket = io("localhost:8080");
 
@@ -14,8 +17,11 @@ export default function Chats() {
         console.log("Chat updated", payload)
     })
 
+    const userId = useSelector((state: RootState) => state.auth.userId);
+
     useEffect(()=>{
         socket.connect();
+        socket.emit("add_user_to_rooms",  {userId});
         return ()=>{socket.disconnect();}
     }, [])
 
@@ -38,6 +44,7 @@ export default function Chats() {
     }}>
         <LogoutButton />
         <ChatsListContainer />
+        <NewChat />
     </Box>
         <Box sx={{
             display: "flex",
